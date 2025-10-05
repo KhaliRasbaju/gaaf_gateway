@@ -11,8 +11,7 @@ COPY . .
 RUN mvn clean install -DskipTests
 
 # Etapa 2: Imagen final ligera con JDK 21
-FROM eclipse-temurin:21.0.8_12-jdk
-
+FROM eclipse-temurin:21-jre
 
 # Directorio de la aplicación
 WORKDIR /app
