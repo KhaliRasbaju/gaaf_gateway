@@ -29,15 +29,16 @@ public class JwtAuthenticationFilter implements GlobalFilter {
             try {
                 DecodedJWT jwt = jwtUtil.validarToken(token);
                 String username = jwt.getSubject();
-                String role = jwt.getClaim("role").asString();
-
+                String role = jwt.getClaim("rol").asString();
+                System.out.println(jwt);
+                System.out.println(jwt.getClaim("rol").asString());
                 // Creamos Authentication con el rol
                 Authentication auth = new UsernamePasswordAuthenticationToken(
                         username,
                         null,
                         List.of(new SimpleGrantedAuthority("ROLE_" + role))
                 );
-
+                System.out.println(auth);
                 // Colocamos la autenticación en el contexto reactivo
                 return chain.filter(exchange)
                         .contextWrite(ReactiveSecurityContextHolder.withAuthentication(auth));

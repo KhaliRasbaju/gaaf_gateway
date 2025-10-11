@@ -1,5 +1,6 @@
 package com.udi.gaaf.gateway.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -10,14 +11,10 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-    private final CustomAccessDeniedHandler accessDeniedHandler;
-    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
-
-    public SecurityConfig(CustomAccessDeniedHandler accessDeniedHandler,
-                          CustomAuthenticationEntryPoint authenticationEntryPoint) {
-        this.accessDeniedHandler = accessDeniedHandler;
-        this.authenticationEntryPoint = authenticationEntryPoint;
-    }
+	@Autowired
+    private  CustomAccessDeniedHandler accessDeniedHandler;
+	@Autowired
+    private  CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
