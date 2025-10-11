@@ -1,56 +1,52 @@
 package com.udi.gaaf.gateway.security;
 
-import java.util.List;
-
-import org.apache.http.HttpHeaders;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
+import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Component
-public class JwtAuthenticationFilter implements GlobalFilter {
+public class JwtAuthenticationFilter implements WebFilter {
 
-	@Autowired
-	private JWTUtil jwtUtil;
-	
-	@Override
-	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-		String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-		if (authHeader != null && authHeader.startsWith("Bearer ")) {
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return chain.filter(exchange);
+        }
+
+        try {
             String token = authHeader.substring(7);
-            try {
-                DecodedJWT jwt = jwtUtil.validarToken(token);
-                String username = jwt.getSubject();
-                String role = jwt.getClaim("rol").asString();
-                System.out.println(jwt);
-                System.out.println(jwt.getClaim("rol").asString());
-                // Creamos Authentication con el rol
-                Authentication auth = new UsernamePasswordAuthenticationToken(
-                        username,
-                        null,
-                        List.of(new SimpleGrantedAuthority("ROLE_" + role))
-                );
-                System.out.println(auth);
-                // Colocamos la autenticación en el contexto reactivo
-                return chain.filter(exchange)
-                        .contextWrite(ReactiveSecurityContextHolder.withAuthentication(auth));
+            DecodedJWT decoded = JWT.decode(token);
+            String username = decoded.getClaim("sub").asString();
+            String role = decoded.getClaim("rol").asString();
+            
+            System.out.println(username);
+            System.out.println(role);
+            
+            System.out.println(decoded);
 
-            } catch (Exception e) {
-                System.err.println("❌ Token inválido: " + e.getMessage());
-                // Si el token es inválido, simplemente continúa sin autenticación
-                return chain.filter(exchange);
+            if (username != null) {
+               
+                var authentication = new UsernamePasswordAuthenticationToken(username, null, List.of(new SimpleGrantedAuthority("ROLE_" + role)));
+
+                return chain.filter(exchange)
+                        .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
             }
+        } catch (Exception e) {
+            System.out.println("Error decodificando token: " + e.getMessage());
         }
 
         return chain.filter(exchange);
-	}
-
+    }
 }
