@@ -28,8 +28,20 @@ public class SecurityConfig {
             .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
             .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
             .authorizeExchange(auth -> auth
-                .pathMatchers("/api/auth/**").permitAll()
-                .pathMatchers("/api/inventario/**").hasRole("ADMIN")
+            	.pathMatchers("/api/auth/registrar").hasRole("ADMIN")
+                .pathMatchers("/api/auth/iniciar").permitAll()
+                .pathMatchers("/api/inventario/bodega/**", 
+                		"/api/inventario/transaccion/**",
+                		"/api/inventario/inventario/**").hasAnyRole("JEFE_BODEGA")
+                .pathMatchers("/api/inventario/reporte/producto-bodega",
+                		"/api/inventario/reporte/inventario-movimiento").hasAnyRole("JEFE_BODEGA", "GERENTE")
+                .pathMatchers("/api/inventario/producto/**",
+                		"/api/inventario/proveedor/**",
+                		"/api/inventario/pedido/**",
+                		"/api/inventario/cuenta/**",
+                		"/api/inventario/entidad-bancaria/**").hasRole("COORDINADOR_COMPRAS")
+                .pathMatchers("/api/inventario/reporte/compra", "/api/inventario/reporte/pedido-proveedor")
+                	.hasAnyRole("COORDINADOR_COMPRAS", "GERENTE")
                 .anyExchange().authenticated()
             )
             .exceptionHandling(ex -> ex
