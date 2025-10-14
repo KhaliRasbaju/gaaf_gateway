@@ -28,7 +28,7 @@ public class SecurityConfig {
             .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
             .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
             .authorizeExchange(auth -> auth
-            	.pathMatchers("/api/auth/registrar").hasRole("ADMIN")
+            	.pathMatchers("/api/auth/registrar").permitAll()
                 .pathMatchers("/api/auth/iniciar").permitAll()
                 .pathMatchers("/api/inventario/bodega/**", 
                 		"/api/inventario/transaccion/**",
