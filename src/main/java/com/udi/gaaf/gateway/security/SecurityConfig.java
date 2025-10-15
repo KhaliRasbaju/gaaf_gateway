@@ -28,8 +28,9 @@ public class SecurityConfig {
             .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
             .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
             .authorizeExchange(auth -> auth
-            	.pathMatchers("/api/auth/registrar").permitAll()
-                .pathMatchers("/api/auth/iniciar").permitAll()
+            	.pathMatchers("/api/autentificacion/auth/registrar").permitAll()
+                .pathMatchers("/api/autentificacion/auth/iniciar").permitAll()
+                .pathMatchers("/api/autentificacion/usuario/**").permitAll()
                 .pathMatchers("/api/inventario/bodega/**", 
                 		"/api/inventario/transaccion/**",
                 		"/api/inventario/inventario/**").hasAnyRole("JEFE_BODEGA")
