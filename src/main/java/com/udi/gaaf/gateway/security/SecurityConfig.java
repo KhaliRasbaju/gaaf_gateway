@@ -31,6 +31,7 @@ public class SecurityConfig {
             	.pathMatchers("/api/autentificacion/auth/registrar").permitAll()
                 .pathMatchers("/api/autentificacion/auth/iniciar").permitAll()
                 .pathMatchers("/api/autentificacion/usuario/**").permitAll()
+                .pathMatchers("/api/inventario/metodo-pago/**").hasAnyRole("COORDINADOR_COMPRAS")
                 .pathMatchers("/api/inventario/ubicacion/**").permitAll()
                 .pathMatchers("/api/inventario/bodega/**", 
                 		"/api/inventario/transaccion/**",
