@@ -31,8 +31,8 @@ public class SecurityConfig {
             	.pathMatchers("/api/autentificacion/auth/registrar").permitAll()
                 .pathMatchers("/api/autentificacion/auth/iniciar").permitAll()
                 .pathMatchers("/api/autentificacion/usuario/**").permitAll()
-                .pathMatchers("/api/autentificacion/v3/api-docs/**", "/api/autentificacion/swagger-ui.html", "/api/autentificacion/swagger-ui/**").permitAll()
-                .pathMatchers("/api/inventario/v3/api-docs/**", "/api/inventario/swagger-ui.html", "/api/inventario/swagger-ui/**").permitAll()
+                .pathMatchers("/api/autentificacion/v3/api-docs/**", "/api/autentificacion/docs/**" ,"/api/autentificacion/swagger-ui.html", "/api/autentificacion/swagger-ui/**").permitAll()
+                .pathMatchers("/api/inventario/v3/api-docs/**", "/api/inventario/docs/**" , "/api/inventario/swagger-ui.html", "/api/inventario/swagger-ui/**").permitAll()
                 .pathMatchers("/api/inventario/metodo-pago/**").hasAnyRole("COORDINADOR_COMPRAS")
                 .pathMatchers("/api/inventario/ubicacion/**").permitAll()
                 .pathMatchers("/api/inventario/bodega/**", 
