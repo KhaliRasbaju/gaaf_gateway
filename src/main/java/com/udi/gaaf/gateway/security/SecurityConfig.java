@@ -40,13 +40,13 @@ public class SecurityConfig {
                 		"/api/inventario/inventario/**").hasAnyRole("JEFE_BODEGA")
                 .pathMatchers("/api/inventario/reporte/producto-bodega",
                 		"/api/inventario/reporte/inventario-movimiento").hasAnyRole("JEFE_BODEGA", "GERENTE")
-                .pathMatchers("/api/inventario/producto/**",
-                		"/api/inventario/proveedor/**",
+                .pathMatchers("/api/inventario/proveedor/**",
                 		"/api/inventario/pedido/**",
                 		"/api/inventario/cuenta/**",
                 		"/api/inventario/entidad-bancaria/**").hasRole("COORDINADOR_COMPRAS")
                 .pathMatchers("/api/inventario/reporte/compra", "/api/inventario/reporte/pedido-proveedor")
                 	.hasAnyRole("COORDINADOR_COMPRAS", "GERENTE")
+                .pathMatchers("/api/inventario/producto/**").hasAnyRole("JEFE_BODEGA", "COORDINADOR_COMPRAS")
                 .anyExchange().authenticated()
             )
             .exceptionHandling(ex -> ex
