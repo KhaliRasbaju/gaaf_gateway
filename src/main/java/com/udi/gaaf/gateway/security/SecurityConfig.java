@@ -3,6 +3,7 @@ package com.udi.gaaf.gateway.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -40,6 +41,7 @@ public class SecurityConfig {
                 		"/api/inventario/inventario/**").hasAnyRole("JEFE_BODEGA")
                 .pathMatchers("/api/inventario/reporte/producto-bodega",
                 		"/api/inventario/reporte/inventario-movimiento").hasAnyRole("JEFE_BODEGA", "GERENTE")
+                .pathMatchers(HttpMethod.GET, "/api/inventario/producto").hasAnyRole("GERENTE")
                 .pathMatchers("/api/inventario/proveedor/**",
                 		"/api/inventario/pedido/**",
                 		"/api/inventario/cuenta/**",
