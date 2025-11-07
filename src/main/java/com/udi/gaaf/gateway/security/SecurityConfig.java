@@ -41,7 +41,7 @@ public class SecurityConfig {
                 		"/api/inventario/inventario/**").hasAnyRole("JEFE_BODEGA")
                 .pathMatchers("/api/inventario/reporte/producto-bodega",
                 		"/api/inventario/reporte/inventario-movimiento").hasAnyRole("JEFE_BODEGA", "GERENTE")
-                .pathMatchers(HttpMethod.GET, "/api/inventario/producto").hasRole("GERENTE")
+                .pathMatchers(HttpMethod.GET, "/api/inventario/producto").hasAnyRole("JEFE_BODEGA", "GERENTE", "COORDINADOR_COMPRAS")
                 .pathMatchers("/api/inventario/proveedor/**",
                 		"/api/inventario/pedido/**",
                 		"/api/inventario/cuenta/**",
